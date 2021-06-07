@@ -1,17 +1,19 @@
-# TEMPLATE
+# n-interactive
 
-...
+Adds common interactive widgets for building 3d interfaces.
 
 ## Usage
 
-See the tests in the `Editor/` folder for each class for usage examples.
+See the examples folder.
+
+Note you must use the new input system.
 
 ## Install
 
 From your unity project folder:
 
     npm init
-    npm install TEMPLATE --save
+    npm install shadowmint/unity-n-interactive --save
     echo Assets/pkg-all >> .gitignore
     echo Assets/pkg-all.meta >> .gitignore
 
@@ -24,7 +26,3 @@ your Assets/pkg-all folder.
     npm install
 
 To reinstall the files from the src folder, run `npm install ..` again.
-
-### Tests
-
-All tests are located in the `Tests` folder.
