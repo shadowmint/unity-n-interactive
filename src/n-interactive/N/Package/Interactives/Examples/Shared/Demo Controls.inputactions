@@ -1,0 +1,52 @@
+{
+    "name": "Demo Controls",
+    "maps": [
+        {
+            "name": "Demo",
+            "id": "6cd05daa-605a-4482-9c7f-c0b91d55101a",
+            "actions": [
+                {
+                    "name": "Drag",
+                    "type": "Value",
+                    "id": "a88ff59c-3f9e-4d97-b470-df3f28876b12",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DragStart",
+                    "type": "Button",
+                    "id": "fc3dae20-870b-4344-9657-e49619a5a9e2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "190b4a66-8a09-41c6-9ad6-a67607aa8f7b",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b44f9fd-49df-48b3-a0c5-17a95e32a46f",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DragStart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
