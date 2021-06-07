@@ -1,6 +1,6 @@
 {
   "name": "unity-n-interactive",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Interactive widgets and helper scripts",
   "main": "index.js",
   "repository": {
