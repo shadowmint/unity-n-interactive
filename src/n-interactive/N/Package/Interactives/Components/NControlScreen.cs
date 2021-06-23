@@ -11,7 +11,7 @@ namespace N.Package.Interactives.Components
 
         public Vector3[] points;
 
-        public Vector3 normal;
+        private Vector3 _normal;
 
         public Vector3 up;
         public Vector3 right;
@@ -23,8 +23,17 @@ namespace N.Package.Interactives.Components
         private Vector3 _pa;
 
         private Vector3 _pb;
+        
+        private Vector3 _height;
+        private Vector3 _width;
 
         public Vector3 Center => points[0] + (points[2] - points[0]) / 2;
+
+        public Vector3 Normal => linked.invertNormal ? -_normal : _normal;
+
+        public Vector3 Height => _height;
+
+        public Vector3 Width => _width;
 
         public void Update()
         {
@@ -67,18 +76,19 @@ namespace N.Package.Interactives.Components
             var localUp = a.transform.up;
 
             var delta = pb - pa;
-            normal = Vector3.Cross(localUp, delta);
+            _normal = Vector3.Cross(localUp, delta);
 
-            var localRight = Vector3.Cross(normal, localUp);
+            var localRight = Vector3.Cross(_normal, localUp);
 
-            var upStep = Vector3.Project(delta, localUp);
-            up = localUp.normalized * upStep.magnitude;
-            right = Vector3.Project(delta, localRight);
-
+            _height = Vector3.Project(delta, localUp);
+            up = localUp.normalized * _height.magnitude;
+            
+            _width = Vector3.Project(delta, localRight);
+            
             points[0] = pa;
-            points[1] = pa + upStep;
+            points[1] = pa + _height;
             points[2] = pb;
-            points[3] = pb - upStep;
+            points[3] = pb - _height;
 
             if (linked.canvas != null)
             {
@@ -105,6 +115,8 @@ namespace N.Package.Interactives.Components
         [System.Serializable]
         public struct LinkedRefs
         {
+            public bool invertNormal;
+
             [Tooltip("Apply this screen to a linked world canvas by assigning it here")]
             public NControlScreenCanvas canvas;
 

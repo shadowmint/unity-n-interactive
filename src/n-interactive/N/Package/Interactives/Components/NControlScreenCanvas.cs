@@ -12,8 +12,6 @@ namespace N.Package.Interactives.Components
 
         private CanvasScaler _canvasScale;
 
-        public bool invertNormal;
-
         private Canvas Canvas
         {
             get
@@ -46,7 +44,7 @@ namespace N.Package.Interactives.Components
             if (rect == null) return;
 
             rect.position = screen.Center;
-            rect.rotation = Quaternion.LookRotation(invertNormal ? -screen.normal : screen.normal, screen.up);
+            rect.rotation = Quaternion.LookRotation(screen.Normal, screen.up);
 
             var up = screen.up.magnitude;
             var right = screen.right.magnitude;

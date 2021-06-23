@@ -6,8 +6,6 @@ namespace N.Package.Interactives.Components
 {
     public class NControlScreenSurface : MonoBehaviour
     {
-        public bool invertNormal;
-
         public Vector3 unitScale = Vector3.one;
 
         public void LinkedUpdate(NControlScreen screen)
@@ -15,7 +13,7 @@ namespace N.Package.Interactives.Components
             var trans = transform;
 
             trans.position = screen.Center;
-            trans.rotation = Quaternion.LookRotation(invertNormal ? -screen.normal : screen.normal, screen.up);
+            trans.rotation = Quaternion.LookRotation(screen.Normal, screen.up);
 
             var up = screen.up.magnitude;
             var right = screen.right.magnitude;
