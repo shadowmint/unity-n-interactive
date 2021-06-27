@@ -78,12 +78,12 @@ namespace N.Package.Interactives.Components
             var delta = pb - pa;
             _normal = Vector3.Cross(localUp, delta);
 
-            var localRight = Vector3.Cross(_normal, localUp);
+            right = Vector3.Cross(_normal, localUp);
 
             _height = Vector3.Project(delta, localUp);
             up = localUp.normalized * _height.magnitude;
             
-            _width = Vector3.Project(delta, localRight);
+            _width = Vector3.Project(delta, right);
             
             points[0] = pa;
             points[1] = pa + _height;

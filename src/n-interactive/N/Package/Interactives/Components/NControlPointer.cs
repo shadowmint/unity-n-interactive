@@ -13,6 +13,8 @@ namespace N.Package.Interactives.Components
 
         InputAction _cachedTrigger;
 
+        private Vector2 _cachedValue;
+
         /// <summary>
         /// Leave this at -1 for single-player games.
         /// For multi-player games, set this to be the player index, and the actions will
@@ -56,7 +58,22 @@ namespace N.Package.Interactives.Components
             }
         }
 
+        public void LateUpdate()
+        {
+            // Repeated actions return zero values sometimes
+            var value = GetAxisValueThisFrame();
+            if (value != Vector2.zero)
+            {
+                _cachedValue = value;
+            }
+        }
+
         public Vector2 GetAxisValue()
+        {
+            return _cachedValue;
+        }
+
+        private Vector2 GetAxisValueThisFrame()
         {
             var action = ResolveAction(axis, ActionId.Axis);
             if (action != null)
@@ -64,6 +81,7 @@ namespace N.Package.Interactives.Components
                 return action.ReadValue<Vector2>();
             }
 
+            Debug.LogWarning($"Unable to resolve action: {axis} on input controller");
             return default;
         }
 
@@ -87,7 +105,10 @@ namespace N.Package.Interactives.Components
 
             // Auto-enable it if disabled
             if (Get(id) != null && !Get(id).enabled)
+            {
                 Get(id).Enable();
+            }
+
 
             return Get(id);
         }

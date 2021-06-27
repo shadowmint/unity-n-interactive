@@ -1,6 +1,7 @@
 using N.Package.Interactives.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace N.Package.Interactives.Infrastructure
 {
@@ -54,7 +55,7 @@ namespace N.Package.Interactives.Infrastructure
             for (var i = 0; i < _lastHits; i++)
             {
                 var p = _hitBuffer[i].point;
-                var depth = Vector3.Distance(fromPoint, p);
+                var depth = _hitBuffer[i].distance;
                 if (lowestDepth < 0 || lowestDepth > depth)
                 {
                     bestPoint = p;

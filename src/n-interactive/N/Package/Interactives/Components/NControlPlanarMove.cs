@@ -19,31 +19,31 @@ namespace N.Package.Interactives.Components
                 refs.pointer = GetComponent<NControlPointer>();
             }
 
-            if (refs.pointer == null)
-            {
-                Debug.LogWarning($"{transform} has no pointer assigned, applying auto-disable.");
-                gameObject.SetActive(false);
-                state.disabled = true;
-            }
-
             if (refs.context == null)
             {
                 refs.context = FindObjectOfType<NControlContext>();
             }
 
-            if (refs.context == null)
-            {
-                Debug.LogWarning($"{transform} has no context assigned, applying auto-disable.");
-                gameObject.SetActive(false);
-                state.disabled = true;
-            }
-
-            if (!state.disabled)
-            {
-                refs.pointer.OnTrigger(OnStarted, OnCancelled);
-            }
-
             _collider = GetComponent<Collider>();
+            state.disabled = true;  // must explicitly activate first update
+        }
+
+        public void Update()
+        {
+            var disabled = refs.pointer == null || refs.context == null;
+            if (disabled != state.disabled)
+            {
+                if (disabled)
+                {
+                    refs.pointer.RemoveEventHandler(OnStarted, OnCancelled);
+                }
+                else
+                {
+                    refs.pointer.OnTrigger(OnStarted, OnCancelled);
+                }
+
+                state.disabled = disabled;
+            }
         }
 
         public void LateUpdate()

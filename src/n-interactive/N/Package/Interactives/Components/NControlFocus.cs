@@ -24,33 +24,32 @@ namespace N.Package.Interactives.Components
                 refs.pointer = GetComponent<NControlPointer>();
             }
 
-            if (refs.pointer == null)
-            {
-                Debug.LogWarning($"{transform} has no pointer assigned, applying auto-disable.");
-                gameObject.SetActive(false);
-                state.disabled = true;
-            }
-
             if (refs.context == null)
             {
                 refs.context = FindObjectOfType<NControlContext>();
             }
 
-            if (refs.context == null)
-            {
-                Debug.LogWarning($"{transform} has no context assigned, applying auto-disable.");
-                gameObject.SetActive(false);
-                state.disabled = true;
-            }
-
-            if (!state.disabled)
-            {
-                refs.pointer.OnTrigger(OnStarted, OnCancelled);
-            }
-
             _colliders.Add(GetComponent<Collider>());
+            state.disabled = true; // must explicitly activate first update
+        }
 
-            LostFocus(Vector3.zero);
+        public void Update()
+        {
+            var disabled = refs.pointer == null || refs.context == null;
+            if (disabled != state.disabled)
+            {
+                if (disabled)
+                {
+                    refs.pointer.RemoveEventHandler(OnStarted, OnCancelled);
+                }
+                else
+                {
+                    refs.pointer.OnTrigger(OnStarted, OnCancelled);
+                    LostFocus(Vector3.zero);
+                }
+
+                state.disabled = disabled;
+            }
         }
 
         public void StartMove()
@@ -82,7 +81,6 @@ namespace N.Package.Interactives.Components
             {
                 var atPoint = Vector3.zero;
                 var anyFocus = _colliders.Any(trackingTarget => refs.context.IsInteracting(refs.pointer, trackingTarget, out atPoint));
-                Debug.Log($"Had any focus: {anyFocus} from {_colliders.Count} targets");
                 if (!anyFocus)
                 {
                     LostFocus(atPoint);
@@ -96,14 +94,10 @@ namespace N.Package.Interactives.Components
             state.initialPoint = atPoint;
             foreach (var target in refs.withFocus)
             {
-                target.gameObject.SetActive(true);
-                if (state.keepFocus)
+                var childCollider = target.GetComponent<Collider>();
+                if (childCollider != null && !_colliders.Contains(childCollider))
                 {
-                    var childCollider = target.GetComponent<Collider>();
-                    if (childCollider != null && !_colliders.Contains(childCollider))
-                    {
-                        _colliders.Add(childCollider);
-                    }
+                    _colliders.Add(childCollider);
                 }
             }
 
@@ -116,7 +110,11 @@ namespace N.Package.Interactives.Components
             state.lastPoint = atPoint;
             foreach (var target in refs.withFocus)
             {
-                target.gameObject.SetActive(false);
+                var childCollider = target.GetComponent<Collider>();
+                if (childCollider != null && _colliders.Contains(childCollider))
+                {
+                    _colliders.Remove(childCollider);
+                }
             }
 
             onChange.Invoke(this);
@@ -129,9 +127,6 @@ namespace N.Package.Interactives.Components
             public bool disabled;
             public Vector3 initialPoint;
             public Vector3 lastPoint;
-
-            [Tooltip("If true, track the colliders of the 'withFocus' refs")]
-            public bool keepFocus;
         }
 
         [System.Serializable]
@@ -139,6 +134,8 @@ namespace N.Package.Interactives.Components
         {
             public NControlPointer pointer;
             public NControlContext context;
+
+            [Tooltip("Keep focus when interacting with these objects")]
             public GameObject[] withFocus;
         }
     }

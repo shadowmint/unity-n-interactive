@@ -5,6 +5,8 @@ namespace N.Package.Interactives.Examples.Shared
 {
     public class ExampleNControlCallbacks : MonoBehaviour
     {
+        public GameObject showOnFocus;
+
         private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
         public void OnFocusChanged(NControlFocus focus)
@@ -14,6 +16,11 @@ namespace N.Package.Interactives.Examples.Shared
             block.SetColor(BaseColor, focus.state.focus ? Color.blue : Color.white);
             Debug.Log($"Changed Focus: {focus.state.focus}");
             urpRenderer.SetPropertyBlock(block);
+
+            if (showOnFocus != null)
+            {
+                showOnFocus.SetActive(focus.state.focus);
+            }
         }
     }
 }
